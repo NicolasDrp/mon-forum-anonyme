@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessageModule } from './message/message.module';
 import { Message } from './message/entities/message.entity';
 import { ConfigModule } from '@nestjs/config';
+import { User } from './message/entities/user.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USER || 'user',
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_NAME || 'mfa',
-      entities: [Message],
+      entities: [Message, User],
       synchronize: true,
     }),
     MessageModule,

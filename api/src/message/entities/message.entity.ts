@@ -3,8 +3,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class Message {
@@ -12,9 +14,8 @@ export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ example: 'Pseudo' })
-  @Column()
-  sender: string;
+  @ManyToOne(() => User, { eager: true })
+  sender: User;
 
   @ApiProperty({ example: 'Voici un message.' })
   @Column()
