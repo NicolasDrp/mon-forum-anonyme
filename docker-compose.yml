@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  api:
+    build:
+      context: ./api
+    ports:
+      - "3000:3000" # TODO : retirer le port et le -web pour qu e l'api soit accessible uniquement en interne
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - internal
+      - web
+
+  sender:
+    build:
+      context: ./sender
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    networks:
+      - internal
+      - web
+
+networks:
+  internal:
+    internal: true
+  web:
+
+volumes:
+  pgdata:
