@@ -12,16 +12,22 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
       context: ./api
     ports:
-      - "3000:3000" # TODO : retirer le port et le -web pour qu e l'api soit accessible uniquement en interne
+      - "3000:3000" # TODO : retirer le port et le -web pour que l'api soit accessible uniquement en interne
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - internal
       - web
@@ -34,7 +40,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - api
+      api:
+        condition: service_started
     networks:
       - internal
       - web
