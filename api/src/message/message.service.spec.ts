@@ -79,4 +79,27 @@ describe('MessageService', () => {
     const result = await service.remove(1);
     expect(result).toEqual(message);
   });
+
+  it('should update a message with new content and sender', async () => {
+    const oldUser = { id: 1, pseudo: 'old' };
+    const newUser = { id: 2, pseudo: 'new' };
+    const existingMessage = { id: 1, content: 'old content', sender: oldUser };
+    const updatedMessage = { id: 1, content: 'new content', sender: newUser };
+    const dto = { content: 'new content', sender: 'new' };
+
+    messageRepo.findOne.mockResolvedValue(existingMessage as Message);
+    userRepo.findOne.mockResolvedValueOnce(null); // simulate new user
+    userRepo.create.mockReturnValue(newUser as User);
+    userRepo.save.mockResolvedValue(newUser as User);
+    messageRepo.merge.mockReturnValue(updatedMessage as Message);
+    messageRepo.save.mockResolvedValue(updatedMessage as Message);
+
+    const result = await service.update(1, dto);
+    expect(result).toEqual(updatedMessage);
+    expect(userRepo.findOne).toHaveBeenCalledWith({ where: { pseudo: 'new' } });
+    expect(messageRepo.merge).toHaveBeenCalledWith(existingMessage, {
+      content: 'new content',
+      sender: newUser,
+    });
+  });
 });
