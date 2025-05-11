@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Envoyer un message</title>
+</head>
+
+<body>
+  <h1>Poster un message anonyme</h1>
+  <form method="POST" action="/send">
+    <input type="text" name="sender" placeholder="Pseudonyme" required />
+    <br />
+    <textarea name="content" placeholder="Votre message" required></textarea>
+    <br />
+    <button type="submit">Envoyer</button>
+  </form>
+</body>
+
+</html>

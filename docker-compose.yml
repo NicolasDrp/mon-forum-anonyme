@@ -1,0 +1,69 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+    ports:
+      - "3000:3000" # TODO : retirer le port et le -web pour que l'api soit accessible uniquement en interne
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+      - web
+
+  sender:
+    build:
+      context: ./sender
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - internal
+      - web
+
+  thread:
+    build:
+      context: ./thread
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - internal
+      - web
+
+networks:
+  internal:
+    internal: true
+  web:
+
+volumes:
+  pgdata:
