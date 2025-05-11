@@ -8,7 +8,18 @@ describe('MessageController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MessageController],
-      providers: [MessageService],
+      providers: [
+        {
+          provide: MessageService,
+          useValue: {
+            create: jest.fn(),
+            findAll: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<MessageController>(MessageController);
