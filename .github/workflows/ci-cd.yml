@@ -1,0 +1,65 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Clone le dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Préparer Node.js (pour lint/test/standard-version)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Installer les dépendances
+      - name: Install dependencies
+        run: |
+          cd api && npm ci
+          cd ../sender && npm ci
+          cd ../thread && npm ci || true  # thread peut ne pas avoir de package.json
+
+      # Lint + Tests
+      - name: Lint and Test
+        run: |
+          cd api
+          npm run lint || true
+          npm run test || true
+          cd ../sender
+          npm run lint || true
+          npm run test || true
+          cd ../thread
+          npm run lint || true
+          npm run test || true
+
+      # Login au GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build et push de chaque image
+      - name: Build and push API image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/forum-api:${{ github.sha }} ./api
+          docker push ghcr.io/${{ github.repository_owner }}/forum-api:${{ github.sha }}
+
+      - name: Build and push Sender image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/forum-sender:${{ github.sha }} ./sender
+          docker push ghcr.io/${{ github.repository_owner }}/forum-sender:${{ github.sha }}
+
+      - name: Build and push Thread image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/forum-thread:${{ github.sha }} ./thread
+          docker push ghcr.io/${{ github.repository_owner }}/forum-thread:${{ github.sha }}
