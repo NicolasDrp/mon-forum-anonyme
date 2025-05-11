@@ -46,6 +46,20 @@ services:
       - internal
       - web
 
+  thread:
+    build:
+      context: ./thread
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - internal
+      - web
+
 networks:
   internal:
     internal: true
