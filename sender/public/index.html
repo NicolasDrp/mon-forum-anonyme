@@ -4,18 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Envoyer un message</title>
+  <title>Forum Anonyme - Envoyer un message</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <h1>Poster un message anonyme</h1>
-  <form method="POST" action="/send">
-    <input type="text" name="sender" placeholder="Pseudonyme" required />
-    <br />
-    <textarea name="content" placeholder="Votre message" required></textarea>
-    <br />
-    <button type="submit">Envoyer</button>
-  </form>
+  <div class="container">
+    <header>
+      <h1>Forum Anonyme</h1>
+      <p>Envoyez un message anonyme</p>
+    </header>
+
+    <main>
+      <section class="form-section">
+        <h2>Poster un message</h2>
+        <form method="POST" action="/send">
+          <div class="form-group">
+            <label for="sender">Pseudonyme</label>
+            <input type="text" id="sender" name="sender" placeholder="Votre pseudo" required />
+          </div>
+
+          <div class="form-group">
+            <label for="content">Message</label>
+            <textarea id="content" name="content" placeholder="Rédigez votre message ici..." required></textarea>
+          </div>
+
+          <button type="submit">Envoyer</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>NicolasDrp - 2025</p>
+      <a href="http://localhost" class="thread-button">Voir les messages</a>
+    </footer>
+  </div>
 </body>
 
 </html>
