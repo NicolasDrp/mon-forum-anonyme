@@ -22,7 +22,7 @@ app.get("/", async (req, res) => {
 
     res.send(html);
   } catch (err) {
-    res.status(500).send("Erreur lors de la récupération des messages.");
+    res.status(500).send("Erreur lors de la récupération des messages." + err);
   }
 });
 
