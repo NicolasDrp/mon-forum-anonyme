@@ -48,18 +48,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: "${{ github.repository_owner }}"
+
       # Build et push de chaque image
       - name: Build and push API image
         run: |
-          docker build -t ghcr.io/forum-api:${{ github.sha }} ./api
-          docker push ghcr.io/forum-api:${{ github.sha }}
+          docker build -t ghcr.io/${OWNER_LC}/forum-api:${{ github.sha }} ./api
+          docker push ghcr.io/${OWNER_LC}/forum-api:${{ github.sha }}
 
       - name: Build and push Sender image
         run: |
-          docker build -t ghcr.io/forum-sender:${{ github.sha }} ./sender
-          docker push ghcr.io/forum-sender:${{ github.sha }}
+          docker build -t ghcr.io/${OWNER_LC}/forum-sender:${{ github.sha }} ./sender
+          docker push ghcr.io/${OWNER_LC}/forum-sender:${{ github.sha }}
 
       - name: Build and push Thread image
         run: |
-          docker build -t ghcr.io/forum-thread:${{ github.sha }} ./thread
-          docker push ghcr.io/forum-thread:${{ github.sha }}
+          docker build -t ghcr.io/${OWNER_LC}/forum-thread:${{ github.sha }} ./thread
+          docker push ghcr.io/${OWNER_LC}/forum-thread:${{ github.sha }}
