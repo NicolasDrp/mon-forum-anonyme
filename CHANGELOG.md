@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2025-05-12)
+
+
+### Features
+
+* add a test script to package.json for sender and thread ([a59e272](https://github.com/NicolasDrp/mon-forum-anonyme/commit/a59e27232abd3fd8c9d19d644d0f57977194ab60))
+
 ### 1.1.5 (2025-05-12)
 
 ### 1.1.4 (2025-05-12)
