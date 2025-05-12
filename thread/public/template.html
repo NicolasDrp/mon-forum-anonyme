@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum Anonyme - Messages</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Forum Anonyme</h1>
+      <p>Consultez les messages du forum</p>
+    </header>
+
+    <main>
+      <section class="messages-section">
+        <h2>Messages récents</h2>
+        <ul class="message-list">
+          {{MESSAGES}}
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>NicolasDrp - 2025</p>
+      <a href="http://localhost:8080" class="post-button">Poster un message</a>
+    </footer>
+  </div>
+</body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("span.date").forEach(span => {
+      const rawDate = span.getAttribute("data-date");
+      if (rawDate) {
+        const date = new Date(rawDate);
+        span.textContent = date.toLocaleString();
+      }
+    });
+  });
+</script>
+
+
+</html>
