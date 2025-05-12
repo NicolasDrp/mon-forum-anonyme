@@ -51,7 +51,7 @@ describe('MessageService', () => {
 
     const result = await service.create(dto);
     expect(result).toEqual(message);
-    expect(userRepo.findOne).toHaveBeenCalledWith({
+    expect(userRepo.findOne.bind(userRepo)).toHaveBeenCalledWith({
       where: { pseudo: 'test' },
     });
   });
@@ -68,7 +68,7 @@ describe('MessageService', () => {
 
     const result = await service.findAll();
     expect(result).toEqual(messages);
-    expect(messageRepo.find).toHaveBeenCalled();
+    expect(messageRepo.find.bind(userRepo)).toHaveBeenCalled();
   });
 
   it('should delete a message', async () => {
@@ -96,10 +96,15 @@ describe('MessageService', () => {
 
     const result = await service.update(1, dto);
     expect(result).toEqual(updatedMessage);
-    expect(userRepo.findOne).toHaveBeenCalledWith({ where: { pseudo: 'new' } });
-    expect(messageRepo.merge).toHaveBeenCalledWith(existingMessage, {
-      content: 'new content',
-      sender: newUser,
+    expect(userRepo.findOne.bind(userRepo)).toHaveBeenCalledWith({
+      where: { pseudo: 'new' },
     });
+    expect(messageRepo.merge.bind(userRepo)).toHaveBeenCalledWith(
+      existingMessage,
+      {
+        content: 'new content',
+        sender: newUser,
+      },
+    );
   });
 });
