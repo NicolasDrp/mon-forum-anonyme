@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { MessageService } from './message.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -51,7 +52,7 @@ describe('MessageService', () => {
 
     const result = await service.create(dto);
     expect(result).toEqual(message);
-    expect(userRepo.findOne.bind(userRepo)).toHaveBeenCalledWith({
+    expect(userRepo.findOne).toHaveBeenCalledWith({
       where: { pseudo: 'test' },
     });
   });
@@ -68,7 +69,7 @@ describe('MessageService', () => {
 
     const result = await service.findAll();
     expect(result).toEqual(messages);
-    expect(messageRepo.find.bind(userRepo)).toHaveBeenCalled();
+    expect(messageRepo.find).toHaveBeenCalled();
   });
 
   it('should delete a message', async () => {
@@ -96,15 +97,12 @@ describe('MessageService', () => {
 
     const result = await service.update(1, dto);
     expect(result).toEqual(updatedMessage);
-    expect(userRepo.findOne.bind(userRepo)).toHaveBeenCalledWith({
+    expect(userRepo.findOne).toHaveBeenCalledWith({
       where: { pseudo: 'new' },
     });
-    expect(messageRepo.merge.bind(userRepo)).toHaveBeenCalledWith(
-      existingMessage,
-      {
-        content: 'new content',
-        sender: newUser,
-      },
-    );
+    expect(messageRepo.merge).toHaveBeenCalledWith(existingMessage, {
+      content: 'new content',
+      sender: newUser,
+    });
   });
 });
