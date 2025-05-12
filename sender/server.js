@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 
 const app = express();
 app.use(express.static("public"));
@@ -17,7 +16,7 @@ app.post("/send", async (req, res) => {
     });
     res.redirect("/");
   } catch (err) {
-    res.status(500).send("Erreur lors de l'envoi");
+    res.status(500).send("Erreur lors de l'envoi" + err);
   }
 });
 
