@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.3.0 (2025-10-15)
+
+
+### Features
+
+* **terraform:** add EC2 instances and security group configuration ([b5a9ae1](https://github.com/NicolasDrp/mon-forum-anonyme/commit/b5a9ae1d317f2b0b6615adc5f2bda9574160ca7a))
+
 ### 1.2.4 (2025-10-15)
 
 ### 1.2.3 (2025-05-12)
