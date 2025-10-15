@@ -102,4 +102,4 @@ jobs:
       - name: Terraform apply
         working-directory: ./terraform
         run: |
-          terraform apply
+          terraform apply -auto-approve
