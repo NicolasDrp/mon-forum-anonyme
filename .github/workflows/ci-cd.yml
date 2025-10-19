@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      # Provide Terraform Cloud token to authenticate remote runs
+      TF_TOKEN_app_terraform_io: ${{ secrets.TFC_TOKEN }}
 
     steps:
       # Clone le dépôt
@@ -88,12 +91,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.13.3
-
-      - name: Login to Terraform Cloud
-        env:
-          TFC_TOKEN: ${{ secrets.TFC_TOKEN }}
-        run: |
-          echo "$TFC_TOKEN" | terraform login --token
 
       - name: Terraform init
         working-directory: ./terraform
