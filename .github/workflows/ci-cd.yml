@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      # Provide Terraform Cloud token to authenticate remote runs
+      # Provide Terraform Cloud token to authenticate remote runs 1
       TF_TOKEN_app_terraform_io: ${{ secrets.TFC_TOKEN }}
 
     steps:
