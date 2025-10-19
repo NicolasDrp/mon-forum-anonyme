@@ -89,6 +89,12 @@ jobs:
         with:
           terraform_version: 1.13.3
 
+      - name: Login to Terraform Cloud
+        env:
+          TFC_TOKEN: ${{ secrets.TFC_TOKEN }}
+        run: |
+          echo "$TFC_TOKEN" | terraform login --token
+
       - name: Terraform init
         working-directory: ./terraform
         run: |

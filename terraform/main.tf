@@ -5,6 +5,15 @@ terraform {
       version = "~> 4.0"
     }
   }
+
+# Ajoute terraform cloud
+  backend "remote" {
+    organization = "NicolasDrp"
+
+    workspaces {
+      name = "terraform-nicolas"
+    }
+  }
 }
 
 provider "aws" {
