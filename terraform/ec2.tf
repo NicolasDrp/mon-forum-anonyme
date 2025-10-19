@@ -40,6 +40,12 @@ resource "aws_security_group" "docker" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+    ingress {
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   egress {
     from_port   = 0
     to_port     = 0
@@ -126,5 +132,30 @@ resource "aws_instance" "thread" {
 
   tags = {
     Name = "thread-server-Nicolas"
+  }
+}
+
+# Minimal DB EC2 running Postgres in Docker
+resource "aws_instance" "db" {
+  ami             = data.aws_ami.ubuntu.id
+  instance_type   = var.aws.instance_type_ec2
+  security_groups = [aws_security_group.docker.name]
+  key_name        = aws_key_pair.deployer.key_name
+
+  user_data = <<-EOF
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo docker run -d --name postgres-db -p 5432:5432 \
+      -e POSTGRES_USER=postgres \
+      -e POSTGRES_PASSWORD=password \
+      -e POSTGRES_DB=postgres \
+      postgres:13
+  EOF
+
+  tags = {
+    Name = "db-server-Nicolas"
   }
 }
